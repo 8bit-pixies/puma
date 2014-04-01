@@ -76,12 +76,16 @@ for (var i=0, attrs=document.getElementsByTagName('puma')[0].attributes, l=attrs
     // add multiple layers
     markdown = markdown.split(/~+\s+=+/m).join("</section>\n<section>\n<section>"); //<section><section> pattern
     markdown = markdown.split(/=+\s+~+/).join("</section>\n</section>\n<section>"); //</section></section> pattern    
-    markdown = markdown.split(/=+\s+<\/section>/).join("</section>\n</section>"); //pattern if it is "===\n~~~\n==="
+    markdown = markdown.split(/=+\s+<\/section>/).join("</section>\n</section>"); //pattern if it is "===\n~~~\n==="; might be more readable just to pull out the whole pattern first...
     markdown = markdown.split(/~+\s/).join("</section>\n<section>");
     markdown = markdown.split(/=+\s/).join("</section>\n<section>");
 
-    var html = "<section>"+marked(markdown)+"</section>";
+    // parse presenter notes
+    var asideRegex = /@{3,}[\s\S]+?@{3,}/;
+    markdown = markdown.replace(asideRegex, "");    
 
+    var html = "<section>"+marked(markdown)+"</section>";
+    
     document.body.style.display = ''; //show the body
 
     // create the divs to put the content in.
@@ -95,5 +99,4 @@ for (var i=0, attrs=document.getElementsByTagName('puma')[0].attributes, l=attrs
     
 })(window, document);
 
-console.log(revealOptions);
 Reveal.initialize(revealOptions);
