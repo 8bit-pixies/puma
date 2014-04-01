@@ -57,7 +57,6 @@ for (var i=0, attrs=document.getElementsByTagName('puma')[0].attributes, l=attrs
     linkEl.rel = 'stylesheet';
     document.head.appendChild(linkEl);
     
-    
     // Stylesheets
     var linkEl = document.createElement('link');
     linkEl.href = './css/reveal.min.css'; 
@@ -69,20 +68,20 @@ for (var i=0, attrs=document.getElementsByTagName('puma')[0].attributes, l=attrs
       linkEl.href = './css/theme/'+theme+'.css';
       linkEl.rel = 'stylesheet';
       document.head.appendChild(linkEl);
-    }
+    }   
 
     // parse slides
     var markdown = markdownEl.textContent || markdownEl.innerText;
-    // add multiple layers
-    markdown = markdown.split(/~+\s+=+/m).join("</section>\n<section>\n<section>"); //<section><section> pattern
-    markdown = markdown.split(/=+\s+~+/).join("</section>\n</section>\n<section>"); //</section></section> pattern    
-    markdown = markdown.split(/=+\s+<\/section>/).join("</section>\n</section>"); //pattern if it is "===\n~~~\n==="; might be more readable just to pull out the whole pattern first...
-    markdown = markdown.split(/~+\s/).join("</section>\n<section>");
-    markdown = markdown.split(/=+\s/).join("</section>\n<section>");
-
+    
     // parse presenter notes
-    var asideRegex = /@{3,}[\s\S]+?@{3,}/;
-    markdown = markdown.replace(asideRegex, "");    
+    markdown = markdown.replace(/@{3,}[\s\S]+?@{3,}/g, "");    
+    
+    // add multiple layers
+    markdown = markdown.split(/={3,}\s+~{3,}\s+={3,}/).join("\n</section>\n</section>\n<section>\n<section>\n"); //pattern if it is "===\n~~~\n==="
+    markdown = markdown.split(/~{3,}\s+={3,}/).join("\n</section>\n<section>\n<section>\n"); //<section><section> pattern
+    markdown = markdown.split(/={3,}\s+~{3,}/).join("\n</section>\n</section>\n<section>\n"); //</section></section> pattern    
+    markdown = markdown.split(/~{3,}\s/).join("\n</section>\n<section>\n");
+    markdown = markdown.split(/={3,}\s/).join("\n</section>\n<section>\n");
 
     var html = "<section>"+marked(markdown)+"</section>";
     
