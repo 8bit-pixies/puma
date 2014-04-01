@@ -21,186 +21,79 @@ return"undefined"!=typeof b?d?d[b]:void 0:c},getPreviousSlide:function(){return 
  * http://chappers.github.com/puma
  */ 
 
-stringToBoolean = function(string){
-	switch(string.toLowerCase()){
-		case "true": case "yes": case "1": return true;
-		case "false": case "no": case "0": case null: return false;
-		default: return Boolean(string);
-	}
-}
-
-// set options...for more information check out reveal.js
+// for all options check out reveal.js, we need to do this before we clear it.
+var puma = document.getElementsByTagName('puma')[0];
 var revealOptions = {};
-var puma = document.getElementsByTagName('puma')[0]
 
-// Display controls in the bottom right corner
-var controls = puma.getAttribute('controls') || 'false';
-controls = stringToBoolean(controls);
-revealOptions['controls']=controls;
-
-// Display a presentation progress bar
-var progress = puma.getAttribute('progress') || 'false';
-progress = stringToBoolean(progress);
-revealOptions['progress']=progress;
-
-// Display the page number of the current slide
-var slideNumber = puma.getAttribute('slideNumber') || 'false';
-slideNumber = stringToBoolean(slideNumber);
-revealOptions['slideNumber']=slideNumber;
-
-// Push each slide change to the browser history
-var history = puma.getAttribute('history') || 'false';
-history = stringToBoolean(history);
-revealOptions['history']=history;
-
-// Enable keyboard shortcuts for navigation
-var keyboard = puma.getAttribute('keyboard') || 'true';
-keyboard = stringToBoolean(keyboard);
-revealOptions['keyboard']=keyboard;
-
-// Enable the slide overview mode
-var overview = puma.getAttribute('overview') || 'true';
-overview = stringToBoolean(overview);
-revealOptions['overview']=overview;
-
-// Vertical centering of slides
-var center = puma.getAttribute('center') || 'true';
-center = stringToBoolean(center);
-revealOptions['center']=center;
-
-// Enable touch navigation on supported devices
-var touch = puma.getAttribute('touch') || 'true';
-touch = stringToBoolean(touch);
-revealOptions['touch']=touch;
-
-// loop the presentation
-var loop = puma.getAttribute('loop') || 'false';
-loop = stringToBoolean(loop);
-revealOptions['loop']=loop;
-
-// change the presentation direction to right to left
-var rtl = puma.getAttribute('rtl') || 'false';
-rtl = stringToBoolean(rtl);
-revealOptions['rtl']=rtl;
-
-// turns fragments on and off globally
-var fragments = puma.getAttribute('fragments') || 'true';
-fragments = stringToBoolean(fragments);
-revealOptions['fragments']=fragments;
-
-// flag if presentation is running in embedded mode
-var embedded = puma.getAttribute('embedded') || 'false';
-embedded = stringToBoolean(embedded);
-revealOptions['embedded']=embedded;
-
-// number of milliseconds to automatically transition to next slide
-// disabled when set to 0
-var autoSlide = puma.getAttribute('autoSlide') || '0';
-autoSlide = parseInt(autoSlide);
-revealOptions['autoSlide']=autoSlide;
-
-// stop autosliding after user input
-var autoSlideStoppable = puma.getAttribute('autoSlideStoppable') || 'true';
-autoSlideStoppable = stringToBoolean(autoSlideStoppable);
-revealOptions['autoSlideStoppable']=autoSlideStoppable;
-
-// engable mouse wheel navigation
-var mouseWheel = puma.getAttribute('mouseWheel') || 'false';
-mouseWheel = stringToBoolean(mouseWheel);
-revealOptions['mouseWheel']=mouseWheel;
-
-// hide address bars for mobile devices
-var hideAddressBar = puma.getAttribute('hideAddressBar') || 'true';
-hideAddressBar = stringToBoolean(hideAddressBar);
-revealOptions['hideAddressBar']=hideAddressBar;
-
-// open links in iframe
-var previewLinks = puma.getAttribute('previewLinks') || 'false';
-previewLinks = stringToBoolean(previewLinks);
-revealOptions['previewLinks']=previewLinks;
-
-// transition style : default/cube/page/concave/zoom/linear/fade/none
-var transition = puma.getAttribute('transition') || 'none';
-transition = transition.toLowerCase();
-revealOptions['transition']=transition;
-
-// transition speed : default/fast/slow
-var transitionSpeed = puma.getAttribute('transitionSpeed') || 'default';
-transitionSpeed = transitionSpeed;
-revealOptions['transitionSpeed']=transitionSpeed;
-
-// transition style for full page slide backgrounds
-var backgroundTransition = puma.getAttribute('backgroundTransition') || 'default';
-backgroundTransition = backgroundTransition;
-revealOptions['backgroundTransition']=backgroundTransition;
-
-// number of slides away from the current that are visible
-var viewDistance = puma.getAttribute('viewDistance') || '3';
-viewDistance = parseInt(viewDistance);
-revealOptions['viewDistance']=viewDistance;
-
-// Parallax background image
-var parallaxBackgroundImage = puma.getAttribute('parallaxBackgroundImage') || '';
-parallaxBackgroundImage = parallaxBackgroundImage;
-revealOptions['parallaxBackgroundImage']=parallaxBackgroundImage;
-
-// Parallax background size
-var parallaxBackgroundSize = puma.getAttribute('parallaxBackgroundSize') || '';
-parallaxBackgroundSize = parallaxBackgroundSize;
-revealOptions['parallaxBackgroundSize']=parallaxBackgroundSize;
- 
-;(function(window, document) {
-document.body.style.display = 'none'; //hide the body
-
-// get the elements we need
-var markdownEl = document.getElementsByTagName('puma')[0];
-
-// meta viewport
-
-// Use <meta> viewport so that Bootstrap is actually responsive on mobile
-  var metaEl = document.createElement('meta');
-  metaEl.name = 'viewport';
-  metaEl.content = 'width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0';
-  if (document.head.firstChild)
-    document.head.insertBefore(metaEl, document.head.firstChild);
-  else
-    document.head.appendChild(metaEl);
-
-// get theme
-var theme = markdownEl.getAttribute('theme') || 'none';
-theme = theme.toLowerCase();
-
-// Stylesheets
-var linkEl = document.createElement('link');
-linkEl.href = './css/reveal.min.css'; 
-linkEl.rel = 'stylesheet';
-document.head.appendChild(linkEl);
-
-if (theme != 'none') {
-  var linkEl = document.createElement('link');
-  linkEl.href = './css/theme/'+theme+'.css';
-  linkEl.rel = 'stylesheet';
-  document.head.appendChild(linkEl);
+for (var i=0, attrs=document.getElementsByTagName('puma')[0].attributes, l=attrs.length; i<l; i++) {
+  attr = attrs.item(i);
+  revealOptions[attr.nodeName] = attr.nodeValue;
 }
 
-// parse slides
-var markdown = (markdownEl.textContent || markdownEl.innerText).split(/~+/).join("</section><section>");
+;(function(window, document) {
+    document.body.style.display = 'none'; //hide the body
 
-var html = "<section>"+marked(markdown)+"</section>";
+    // get the elements we need
+    var markdownEl = document.getElementsByTagName('puma')[0];
 
-document.body.style.display = ''; //show the body
+    // meta viewport
 
-// create the divs to put the content in.
-var content = document.createElement('div');
-    content.className='reveal';
-    content.id = 'content';
+    // Use <meta> viewport so that Bootstrap is actually responsive on mobile
+      var metaEl = document.createElement('meta');
+      metaEl.name = 'viewport';
+      metaEl.content = 'width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0';
+      if (document.head.firstChild)
+        document.head.insertBefore(metaEl, document.head.firstChild);
+      else
+        document.head.appendChild(metaEl);
 
-    document.body.replaceChild(content, markdownEl);
+    // get theme
+    var theme = markdownEl.getAttribute('theme') || 'none';
+    theme = theme.toLowerCase();
+
+    // Syntax highlight
+    var linkEl = document.createElement('link');
+    linkEl.href = 'http://yandex.st/highlightjs/8.0/styles/default.min.css'; // make this local
+    linkEl.rel = 'stylesheet';
+    document.head.appendChild(linkEl);
     
-    document.getElementById('content').innerHTML = '<div class="slides">'+html+'</div>';
+    
+    // Stylesheets
+    var linkEl = document.createElement('link');
+    linkEl.href = './css/reveal.min.css'; 
+    linkEl.rel = 'stylesheet';
+    document.head.appendChild(linkEl);
 
+    if (theme != 'none') {
+      var linkEl = document.createElement('link');
+      linkEl.href = './css/theme/'+theme+'.css';
+      linkEl.rel = 'stylesheet';
+      document.head.appendChild(linkEl);
+    }
+
+    // parse slides
+    var markdown = markdownEl.textContent || markdownEl.innerText;
+    // add multiple layers
+    markdown = markdown.split(/~+\s+=+/m).join("</section>\n<section>\n<section>"); //<section><section> pattern
+    markdown = markdown.split(/=+\s+~+/).join("</section>\n</section>\n<section>"); //</section></section> pattern    
+    markdown = markdown.split(/=+\s+<\/section>/).join("</section>\n</section>"); //pattern if it is "===\n~~~\n==="
+    markdown = markdown.split(/~+\s/).join("</section>\n<section>");
+    markdown = markdown.split(/=+\s/).join("</section>\n<section>");
+
+    var html = "<section>"+marked(markdown)+"</section>";
+
+    document.body.style.display = ''; //show the body
+
+    // create the divs to put the content in.
+    var content = document.createElement('div');
+        content.className='reveal';
+        content.id = 'content';
+
+        document.body.replaceChild(content, markdownEl);
+        
+        document.getElementById('content').innerHTML = '<div class="slides">'+html+'</div>';
+    
 })(window, document);
 
-// get reveal-js options
 console.log(revealOptions);
 Reveal.initialize(revealOptions);
